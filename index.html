@@ -1,0 +1,70 @@
+<!--
+MSFS Live Stream Overlay
+Version: 1.0.0
+Changelog:
+- 1.0.0: Initial release with altitude, airspeed, and heading display.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSFS Overlay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            background: transparent;
+            text-shadow: 2px 2px 5px black;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .data-container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="data-container">
+        <h2>Flight Data</h2>
+        <p>Altitude: <span id="altitude">0</span> ft</p>
+        <p>Airspeed: <span id="airspeed">0</span> knots</p>
+        <p>Heading: <span id="heading">0</span>°</p>
+        <p>Overlay Version: <span id="version">Loading...</span></p>
+    </div>
+
+    <script>
+        const serverIP = "http://<MSFS-PC-IP>:5000";
+
+        async function fetchData() {
+            try {
+                const response = await fetch(`${serverIP}/data`);
+                const data = await response.json();
+                
+                document.getElementById('altitude').textContent = data.altitude.toFixed(2);
+                document.getElementById('airspeed').textContent = data.airspeed.toFixed(2);
+                document.getElementById('heading').textContent = data.heading.toFixed(2);
+            } catch (error) {
+                console.error("Error fetching flight data:", error);
+            }
+        }
+
+        async function fetchVersion() {
+            try {
+                const response = await fetch(`${serverIP}/version`);
+                const data = await response.json();
+                document.getElementById('version').textContent = data.version;
+            } catch (error) {
+                console.error("Error fetching version info:", error);
+            }
+        }
+
+        fetchVersion();
+        setInterval(fetchData, 1000); // Update every second
+    </script>
+</body>
+</html>
