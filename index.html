@@ -1,8 +1,9 @@
 <!--
 MSFS Live Stream Overlay
-Version: 1.0.0
+Version: 1.0.1
 Changelog:
 - 1.0.0: Initial release with altitude, airspeed, and heading display.
+- 1.0.1: Set serverIP const -- may switch to .env file in the future.
 -->
 
 <!DOCTYPE html>
@@ -38,7 +39,7 @@ Changelog:
     </div>
 
     <script>
-        const serverIP = "http://<MSFS-PC-IP>:5000";
+        const serverIP = "http://mgaming.local:5000";
 
         async function fetchData() {
             try {
