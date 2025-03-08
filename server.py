@@ -1,11 +1,12 @@
 """
 MSFS Live Stream Overlay Server
-Version: 1.0.0
+Version: 1.0.1
 Changelog:
 - 1.0.0: Initial release with SimConnect data streaming (altitude, airspeed, heading).
+- 1.0.1: Added app.route for a nicer 404 until it gets perma-fixed.
 """
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 from SimConnect import SimConnect, AircraftRequests
 import threading
@@ -13,6 +14,10 @@ import time
 
 app = Flask(__name__)
 CORS(app)  # Allow requests from any frontend
+
+@app.route('/')
+def home():
+    return jsonify({"message": "MSFS Overlay API is running. Use /data for flight data."})
 
 # Connect to SimConnect
 sm = SimConnect()
