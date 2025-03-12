@@ -1,9 +1,11 @@
 <!--
 MSFS Live Stream Overlay
-Version: 1.0.1
+Version: 1.1.0
 Changelog:
 - 1.0.0: Initial release with altitude, airspeed, and heading display.
 - 1.0.1: Set serverIP const -- may switch to .env file in the future.
+- 1.1.0: Added UI elements for GPS ETE (Estimated Time Enroute) and GPS ETA (Zulu time).
+-        Updated JavaScript to fetch and display GPS ETE & GPS ETA dynamically.
 -->
 
 <!DOCTYPE html>
@@ -16,56 +18,45 @@ Changelog:
         body {
             font-family: Arial, sans-serif;
             color: white;
-            background: transparent;
-            text-shadow: 2px 2px 5px black;
+            background: rgba(0, 0, 0, 0.6);
             position: absolute;
             top: 10px;
             left: 10px;
-        }
-        .data-container {
-            background: rgba(0, 0, 0, 0.5);
             padding: 10px;
             border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="data-container">
-        <h2>Flight Data</h2>
-        <p>Altitude: <span id="altitude">0</span> ft</p>
-        <p>Airspeed: <span id="airspeed">0</span> knots</p>
-        <p>Heading: <span id="heading">0</span>°</p>
-        <p>Overlay Version: <span id="version">Loading...</span></p>
-    </div>
+    <h2>Flight Data</h2>
+    <p>Airspeed: <span id="airspeed">Loading...</span> knots</p>
+    <p>Altitude: <span id="altitude">Loading...</span> feet</p>
+    <p>Heading: <span id="heading">Loading...</span>°</p>
+    <p>Latitude: <span id="latitude">Loading...</span></p>
+    <p>Longitude: <span id="longitude">Loading...</span></p>
+    <p>GPS ETE: <span id="gps_ete">Loading...</span> sec</p>
+    <p>GPS ETA: <span id="gps_eta">Loading...</span> Z</p>
 
     <script>
         const serverIP = "http://mgaming.local:5000";
 
-        async function fetchData() {
-            try {
-                const response = await fetch(`${serverIP}/data`);
-                const data = await response.json();
-                
-                document.getElementById('altitude').textContent = data.altitude.toFixed(2);
-                document.getElementById('airspeed').textContent = data.airspeed.toFixed(2);
-                document.getElementById('heading').textContent = data.heading.toFixed(2);
-            } catch (error) {
-                console.error("Error fetching flight data:", error);
-            }
+        function updateFlightData() {
+            fetch(`${serverIP}/data`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("airspeed").textContent = data.airspeed.toFixed(0);
+                    document.getElementById("altitude").textContent = data.altitude.toFixed(0);
+                    document.getElementById("heading").textContent = data.heading.toFixed(0);
+                    document.getElementById("latitude").textContent = data.latitude.toFixed(6);
+                    document.getElementById("longitude").textContent = data.longitude.toFixed(6);
+                    document.getElementById("gps_ete").textContent = data.gps_ete.toFixed(0);  // Round seconds
+                    document.getElementById("gps_eta").textContent = data.gps_eta; // Already formatted as HH:MM:SSZ
+                })
+                .catch(error => console.error("Error fetching data:", error));
         }
 
-        async function fetchVersion() {
-            try {
-                const response = await fetch(`${serverIP}/version`);
-                const data = await response.json();
-                document.getElementById('version').textContent = data.version;
-            } catch (error) {
-                console.error("Error fetching version info:", error);
-            }
-        }
-
-        fetchVersion();
-        setInterval(fetchData, 1000); // Update every second
+        setInterval(updateFlightData, 1000); // Update every second
+        updateFlightData(); // Initial load
     </script>
 </body>
 </html>
