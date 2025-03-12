@@ -1,18 +1,18 @@
 """
 server.py - MSFS 2024 Overlay API
-Version: 1.1.1
+Version: 1.2.0
 Changelog:
-- Added GPS ETE (Estimated Time Enroute) in seconds.
-- Added GPS ETA (Estimated Time of Arrival in Zulu time).
-- Converted GPS ETA from raw seconds into HH:MM:SS format.
-- Fixed SimConnect AircraftRequests() instantiation error.
+- Added static file serving for index.html.
+- Modified root ("/") route to serve index.html instead of JSON message.
+- Ensured Flask serves additional static files from the 'static' directory.
 """
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 from SimConnect import SimConnect, AircraftRequests
+import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static")  # Set static folder for serving files
 CORS(app)
 
 # Connect to SimConnect
@@ -41,10 +41,12 @@ def format_eta(seconds_since_midnight):
 
 @app.route("/")
 def home():
-    return jsonify({"message": "MSFS Overlay API is running. Use /data for flight data."})
+    """Serve the main overlay HTML page."""
+    return send_from_directory("static", "index.html")
 
 @app.route("/data")
 def get_flight_data():
+    """Fetch and return flight simulation data in JSON format."""
     flight_data = {
         "airspeed": aq.get("AIRSPEED_INDICATED"),
         "altitude": aq.get("PLANE_ALTITUDE"),
@@ -55,6 +57,11 @@ def get_flight_data():
         "gps_eta": format_eta(aq.get("GPS_ETA")),  # Convert to readable Zulu time
     }
     return jsonify(flight_data)
+
+@app.route("/<path:filename>")
+def static_files(filename):
+    """Serve other static files such as CSS, JS, and images."""
+    return send_from_directory("static", filename)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
