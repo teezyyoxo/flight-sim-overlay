@@ -3,7 +3,7 @@
 I created this repo to track progress on a project for my fellow flight simulator enthusiasts. It provides a **free, customizable overlay** for flight simulator video recordings or live streams that displays basic telemetry data about the aircraft and the active flight. It currently uses SimConnect to access this data.
 ![alt text](screenshots/KSFO.png)
 ## Features:
-- {Eventually} customizable telemetry overlay for flight simulator recordings or live streams
+- ~~Customizable telemetry overlay for flight simulator recordings or live streams~~ (not yet!)
 - Server-side code written in Python
 - Client-side HTML overlay viewable in any browser or streaming software (works great in Streamlabs Desktop on macOS!)
 
@@ -26,7 +26,11 @@ I created this repo to track progress on a project for my fellow flight simulato
 -   I love Volanta's overlays, but I dislike the paywall and the fact that their overlay only works on the same machine you run the sim on.
 -   While I know there's a way to grab or forward the websocket data stream, I'm having much more fun creating my own to share with fellow simmers!
 
-## Enjoy! 🎮
-Feel free to submit a pull request if you'd like to help with styling or add new features.
+If you haven't already and since you're already here, check out my other project: 
+[GeoShottr](https://github.com/teezyyoxo/geoshottr).
+*Automatically add location data to your in-sim screenshots!*
+
+*Please* feel free to submit a pull request if you'd like to help with styling and/or add new features!
 ----------
-Happy flying! ✈️
+And remember, friends – in the name of Kelsey (74Gear), **keep the blue side up**.
+Enjoy, and happy flying! ✈️ 🎮
