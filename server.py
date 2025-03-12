@@ -1,22 +1,23 @@
 """
 server.py - MSFS 2024 Overlay API
-Version: 1.1.0
+Version: 1.1.1
 Changelog:
 - Added GPS ETE (Estimated Time Enroute) in seconds.
 - Added GPS ETA (Estimated Time of Arrival in Zulu time).
 - Converted GPS ETA from raw seconds into HH:MM:SS format.
+- Fixed SimConnect AircraftRequests() instantiation error.
 """
 
 from flask import Flask, jsonify
 from flask_cors import CORS
-from SimConnect import SimConnect
+from SimConnect import SimConnect, AircraftRequests
 
 app = Flask(__name__)
 CORS(app)
 
 # Connect to SimConnect
 sm = SimConnect()
-aq = sm.AircraftRequests()
+aq = AircraftRequests(sm) # pass SimConnect instance to AircraftRequests attribute
 
 # SimVars to fetch
 simvars = {
