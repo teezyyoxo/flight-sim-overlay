@@ -18,10 +18,8 @@ I created this repo to track progress on a project for my fellow flight simulato
 1.  Open `index.html` in a browser or add it as a browser object in your streaming software.
 2.  Update the `serverIP` value on **line 41** of `index.html` to the IP or name of your sim machine.
     -   If you're streaming from the same PC you're running the sim on, change it to `localhost:5000`.
-`<!-- Update this line to match your server IP -->`
-`<script>`
-    `const serverIP = 'localhost:5000';`
-`</script>`
+**Update this line to match your server IP**
+`const serverIP = 'localhost:5000';`
 ### Customization 🚀
 -   There is no customization for now as this is merely a **proof of concept**.
 -   I love Volanta's overlays, but I dislike the paywall and the fact that their overlay only works on the same machine you run the sim on.
