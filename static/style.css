@@ -1,7 +1,8 @@
 /*
 MSFS Live Stream Overlay Styles
-Version: 1.0.1
+Version: 1.0.2
 Changelog:
+- 1.0.2: Actually corrected paths. Oops!
 _ 1.0.1: Corrected background url paths, attempted to fix overlay position. This will take some testing...
 - 1.0.0: Initial release with styles for overlay, progress bar, and progress indicator. Totally bogus position values for now lol.
 */
@@ -23,7 +24,7 @@ body {
     left: 0;
     width: min(100vw, 1920px);
     height: min(100vh, 1080px);
-    background: url('/static/style-elements/overlay/overlay.png') no-repeat center center;
+    background: url('style-elements/overlay/overlay.png') no-repeat center center;
     background-size: contain;
 }
 
