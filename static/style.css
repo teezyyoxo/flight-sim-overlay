@@ -1,0 +1,65 @@
+/*
+MSFS Live Stream Overlay Styles
+Version: 1.0.0
+Changelog:
+- 1.0.0: Initial release with styles for overlay, progress bar, and progress indicator. Totally bogus position values for now lol.
+*/
+
+body {
+    font-family: Arial, sans-serif;
+    color: white;
+    background: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('/static/style-elements/overlay/overlay.png') no-repeat center center;
+    background-size: contain;
+    pointer-events: none;
+}
+
+.progress-bar {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px; /* Adjust to match your design */
+    height: 20px;
+    background: url('/static/style-elements/progressbar/prog_bar_bg.png') no-repeat;
+    background-size: contain;
+}
+
+.progress-bar-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: url('/static/style-elements/progressbar/prog_bar_fill.png') no-repeat;
+    background-size: contain;
+    width: 0%; /* This will be dynamically updated */
+}
+
+.progress-indicator {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 30px;
+    width: 30px;
+    background: url('/static/style-elements/progressbar/prog_bar_plane.png') no-repeat;
+    background-size: contain;
+    left: 0%; /* This will be dynamically updated */
+}
+
+/* Ensure progress elements layer correctly */
+.progress-bar, .progress-bar-fill, .progress-indicator {
+    z-index: 10;
+}
