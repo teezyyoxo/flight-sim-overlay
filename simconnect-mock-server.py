@@ -8,6 +8,7 @@
 # 1.1.0 - Added GPS ETE and ETA simulation. Implemented versioning and changelog.
 # 1.1.1 - Implemented dynamic port selection if 5000 is in use.
 # 1.2.0 - Added connection logging, request/response status logging, and server health tracking.
+# 1.3.0 - Added root endpoint with server status and improved logging for health checks.
 
 from flask import Flask, jsonify, request
 import random
@@ -16,7 +17,7 @@ import socket
 
 app = Flask(__name__)
 
-VERSION = "1.2.0"
+VERSION = "1.3.0"
 
 # Global variable to track if the server is running
 server_status = "Server is not running."
@@ -33,6 +34,14 @@ def generate_simvars():
         "gps_eta": (datetime.datetime.utcnow() + datetime.timedelta(seconds=random.uniform(300, 3600))).strftime("%H:%M:%S Z")  # ETA in UTC time
     }
 
+@app.route('/')
+def index():
+    return jsonify({
+        "status": "SimConnect Mock Server is running",
+        "version": VERSION,
+        "instructions": "Use /data to get simulated data or /version for version information."
+    })
+
 @app.route('/data', methods=['GET'])
 def get_data():
     return jsonify(generate_simvars())
@@ -43,7 +52,8 @@ def get_version():
         "1.0.0 - Initial commit with basic SimVars.",
         "1.1.0 - Added GPS ETE and ETA simulation. Implemented versioning and changelog.",
         "1.1.1 - Implemented dynamic port selection if 5000 is in use.",
-        "1.2.0 - Added connection logging, request/response status logging, and server health tracking."
+        "1.2.0 - Added connection logging, request/response status logging, and server health tracking.",
+        "1.3.0 - Added root endpoint with server status and improved logging for health checks."
     ]})
 
 # Hook to log every incoming request
