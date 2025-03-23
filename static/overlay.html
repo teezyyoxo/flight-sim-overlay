@@ -1,9 +1,10 @@
 <!--
 MSFS Live Stream Overlay
-Version: 1.1.0
+Version: 1.1.1
 Changelog:
 - 1.0.0: Initial commit.
 - 1.1.0: Implemented server and port availability check, falling back to alternative server addresses if necessary.
+- 1.1.1: Added visual connection status indicator (ONLINE/OFFLINE) with green/red dot representation.
 -->
 
 <!DOCTYPE html>
@@ -13,10 +14,27 @@ Changelog:
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MSFS Overlay</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Add basic styles for the status indicator */
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        .status-online {
+            background-color: green;
+        }
+        .status-offline {
+            background-color: red;
+        }
+    </style>
 </head>
 <body>
     <div class="overlay"></div>
     <h2>Flight Data</h2>
+    <p>Status: <span id="connection-status">Checking...</span><span id="status-indicator" class="status-offline"></span></p>
     <p>Airspeed: <span id="airspeed">Loading...</span> knots</p>
     <p>Altitude: <span id="altitude">Loading...</span> feet</p>
     <p>Heading: <span id="heading">Loading...</span>°</p>
@@ -66,12 +84,28 @@ Changelog:
             try {
                 const serverIP = await findServer();
                 console.log(`Using server: ${serverIP}`);
+                updateConnectionStatus(true);
                 updateFlightData(serverIP);
             } catch (error) {
                 console.error(error.message);
+                updateConnectionStatus(false);
                 document.getElementById("error-message").innerText =
                     "Error: No available servers. Retrying in 5 seconds...";
                 setTimeout(initialize, 5000); // Retry after 5 seconds
+            }
+        }
+
+        function updateConnectionStatus(online) {
+            const statusText = document.getElementById("connection-status");
+            const statusIndicator = document.getElementById("status-indicator");
+            if (online) {
+                statusText.textContent = "ONLINE";
+                statusIndicator.classList.remove("status-offline");
+                statusIndicator.classList.add("status-online");
+            } else {
+                statusText.textContent = "OFFLINE";
+                statusIndicator.classList.remove("status-online");
+                statusIndicator.classList.add("status-offline");
             }
         }
 
