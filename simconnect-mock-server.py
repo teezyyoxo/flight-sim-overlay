@@ -7,15 +7,19 @@
 # 1.0.0 - Initial commit with basic SimVars.
 # 1.1.0 - Added GPS ETE and ETA simulation. Implemented versioning and changelog.
 # 1.1.1 - Implemented dynamic port selection if 5000 is in use.
+# 1.2.0 - Added connection logging, request/response status logging, and server health tracking.
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import random
 import datetime
 import socket
 
 app = Flask(__name__)
 
-VERSION = "1.1.1"
+VERSION = "1.2.0"
+
+# Global variable to track if the server is running
+server_status = "Server is not running."
 
 def generate_simvars():
     return {
@@ -38,8 +42,20 @@ def get_version():
     return jsonify({"version": VERSION, "changelog": [
         "1.0.0 - Initial commit with basic SimVars.",
         "1.1.0 - Added GPS ETE and ETA simulation. Implemented versioning and changelog.",
-        "1.1.1 - Implemented dynamic port selection if 5000 is in use."
+        "1.1.1 - Implemented dynamic port selection if 5000 is in use.",
+        "1.2.0 - Added connection logging, request/response status logging, and server health tracking."
     ]})
+
+# Hook to log every incoming request
+@app.before_request
+def log_request():
+    print(f"Connection attempt: {request.remote_addr} - {request.method} {request.url}")
+
+# Hook to log successful responses
+@app.after_request
+def log_response(response):
+    print(f"Response: {response.status} for {request.method} {request.url}")
+    return response
 
 def find_available_port(start_port=5000, max_attempts=10):
     for port in range(start_port, start_port + max_attempts):
@@ -51,7 +67,9 @@ def find_available_port(start_port=5000, max_attempts=10):
 if __name__ == '__main__':
     port = find_available_port()
     if port:
+        server_status = f"Server is running on port {port}."
         print(f"Starting server on port {port}")
         app.run(host='0.0.0.0', port=port, debug=True)
     else:
-        print("No available ports found in range. Exiting.")
+        server_status = "No available ports found. Server is not running."
+        print(server_status)
