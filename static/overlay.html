@@ -1,11 +1,12 @@
 <!--
 MSFS Live Stream Overlay
-Version: 1.1.2
+Version: 1.1.2-testing1
 Changelog:
 - 1.0.0: Initial commit.
 - 1.1.0: Implemented server and port availability check, falling back to alternative server addresses if necessary.
 - 1.1.1: Added visual connection status indicator (ONLINE/OFFLINE) with green/red dot representation.
 - 1.1.2: Updated to handle fallback between localhost and mgaming.local for server data fetching.
+- 1.1.2-testing1: Attempt to play around with styling. (Testing)
 -->
 
 <!DOCTYPE html>
@@ -43,8 +44,8 @@ Changelog:
     <p>Heading: <span id="heading">Loading...</span>°</p>
     <p>Latitude: <span id="latitude">Loading...</span></p>
     <p>Longitude: <span id="longitude">Loading...</span></p>
-    <p>GPS ETE: <span id="gps_ete">Loading...</span> sec</p>
-    <p>GPS ETA: <span id="gps_eta">Loading...</span> Z</p>
+    <p class="positioned" style="top: 34px; left:340px">ETE: <span id="gps_ete">Loading...</span> sec</p>
+    <p class="positioned" style="top: 5px; left:412px">ETA: <span id="gps_eta">Loading...</span></p>
     
     <div class="progress-bar">
         <div class="progress-bar-fill" id="progress-fill"></div>
