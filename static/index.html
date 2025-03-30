@@ -1,62 +1,383 @@
-<!--
-MSFS Live Stream Overlay
-Version: 1.1.0
-Changelog:
-- 1.0.0: Initial release with altitude, airspeed, and heading display.
-- 1.0.1: Set serverIP const -- may switch to .env file in the future.
-- 1.1.0: Added UI elements for GPS ETE (Estimated Time Enroute) and GPS ETA (Zulu time).
--        Updated JavaScript to fetch and display GPS ETE & GPS ETA dynamically.
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>MSFS Overlay</title>
-    <style>
+<style>
         body {
-            font-family: Arial, sans-serif;
-            color: white;
-            background: rgba(0, 0, 0, 0.6);
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 10px;
-            border-radius: 5px;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                font-family: 'Segoe UI', sans-serif;
+                color: #fff;
+                background: #888;
         }
-    </style>
+        .overlay {
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 96%;
+                height: 115px;
+                border-radius: 17px;
+                overflow: hidden;
+                z-index: 1000;
+        }
+        .overlay::before {
+                content: "";
+                position: absolute;
+                top: -20px;
+                left: -20px;
+                width: calc(100% + 40px);
+                height: calc(100% + 40px);
+                background: rgba(50, 50, 50, 0.7);
+                filter: blur(10px);
+                z-index: -1;
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                border-radius: 17px;
+        }
+        .container {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: 100%;
+                box-sizing: border-box;
+                position: relative;
+                z-index: 1; 
+        }
+        .top-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                height: 50px;
+                margin-top: 10px;
+                position: relative;
+        }
+        .top-row {
+                position: relative;
+                height: 50px;
+                margin-top: 10px;
+                width: 100%;
+        }
+        .data-block {
+                position: absolute;
+                margin: 0 2px;
+                margin-top: 10px !important;
+                width: auto;
+                top: 0;
+        }
+        .top-row .data-block:nth-child(1) { left: 2%; }
+        .top-row .data-block:nth-child(2) { left: 14%; }
+        .top-row .data-block:nth-child(3) { left: 27%; }
+        .top-row .data-block:nth-child(5) { right: 27%; }
+        .top-row .data-block:nth-child(6) { right: 14%; }
+        .top-row .data-block:nth-child(7) { right: 2%; }
+        
+        .data-block h3 {
+                margin: 0;
+                font-size: 12px;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                text-align: center;
+        }
+        .data-block p {
+                margin: 5px 0 0;
+                font-size: 20px;
+                font-weight: bold;
+                text-align: center;
+        }
+        .heading-tape-container {
+                position: absolute;
+                width: 400px;
+                height: 80px;
+                overflow: hidden;
+                border-radius: 0px;
+                z-index: 5;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 0;
+                margin-top: -20px;
+        }
+        .heading-center-value {
+                position: absolute;
+                top: 45%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 45px;
+                font-weight: bold;
+                color: #fff;
+                z-index: 6;
+        }
+        .heading-tape {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                height: 40px;
+                white-space: nowrap;
+                will-change: transform;
+                transition: transform 0.2s ease-out;
+        }
+        .tick {
+                position: absolute;
+                bottom: 0;
+                width: 1.1px;
+                height: 15px;
+                background: rgba(255, 255, 255, 0.5);
+        }
+        .tick.major {
+                height: 20px;
+                background: rgba(255, 255, 255, 0.8);
+        }
+        .tick-label {
+                position: absolute;
+                bottom: 25px;
+                transform: translateX(-50%);
+                font-size: 12px;
+                color: #fff;
+                white-space: nowrap;
+        }
+        .tick-label.hide {
+                opacity: 0;
+        }
+        .heading-bug {
+                position: absolute;
+                bottom: 0px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 0;
+                height: 0;
+                border-left: 10px solid transparent;
+                border-right: 10px solid transparent;
+                border-bottom: 15px solid #00FFFF;
+                z-index: 6;
+        }
+        .heading-tape-container::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 1px;
+                background: rgba(255, 255, 255, 0.3);
+                
+        }
+        .heading-tape-container::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 1px;
+        }
+        .bottom-row {
+                flex: 0 0 auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                
+        }
+        .progress-container {
+                position: relative;
+                width: 97%;
+                height: 30px;
+                margin-top: 40px;
+        }
+        .progress-bar {
+                width: 100%;
+                height: 10px;
+                background: rgba(255,255,255,0.2);
+                border-radius: 5px;
+                overflow: hidden;
+        }
+        .progress-fill {
+                width: 0%;
+                height: 100%;
+                background: #00FFFF;
+                transition: width 0.25s linear;
+        }
+        .aircraft {
+            position: absolute;
+            top: -10px;
+            height: 30px;
+            transform: translateX(-50%);
+            filter: brightness(0) invert(1) sepia(100%) saturate(10000%) hue-rotate(175deg);
+            /* this makes the aircraft png image cyan - can delete if not wanted */
+        }
+
+</style>
 </head>
 <body>
-    <h2>Flight Data</h2>
-    <p>Airspeed: <span id="airspeed">Loading...</span> knots</p>
-    <p>Altitude: <span id="altitude">Loading...</span> feet</p>
-    <p>Heading: <span id="heading">Loading...</span>°</p>
-    <p>Latitude: <span id="latitude">Loading...</span></p>
-    <p>Longitude: <span id="longitude">Loading...</span></p>
-    <p>GPS ETE: <span id="gps_ete">Loading...</span> sec</p>
-    <p>GPS ETA: <span id="gps_eta">Loading...</span> Z</p>
-
-    <script>
-        const serverIP = "http://mgaming.local:5000";
-
-        function updateFlightData() {
-            fetch(`${serverIP}/data`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("airspeed").textContent = data.airspeed.toFixed(0);
-                    document.getElementById("altitude").textContent = data.altitude.toFixed(0);
-                    document.getElementById("heading").textContent = data.heading.toFixed(0);
-                    document.getElementById("latitude").textContent = data.latitude.toFixed(6);
-                    document.getElementById("longitude").textContent = data.longitude.toFixed(6);
-                    document.getElementById("gps_ete").textContent = data.gps_ete.toFixed(0);  // Round seconds
-                    document.getElementById("gps_eta").textContent = data.gps_eta; // Already formatted as HH:MM:SSZ
-                })
-                .catch(error => console.error("Error fetching data:", error));
+  <div class="overlay">
+    <div class="container">
+      <div class="top-row">
+        <div class="data-block">
+          <h3>Airspeed</h3>
+          <p><span id="airspeed">109</span> kt</p>
+        </div>
+        <div class="data-block">
+          <h3>Altitude</h3>
+          <p><span id="altitude">387</span> ft</p>
+        </div>
+        <div class="data-block">
+          <h3>Lat</h3>
+          <p><span id="latitude">60.046491</span></p>
+        </div>
+        <div class="heading-tape-container">
+          <div class="heading-center-value" id="headingCenterValue">0</div>
+          <div class="heading-tape" id="headingTape"></div>
+          <div class="heading-bug"></div>
+        </div>
+        <div class="data-block">
+          <h3>Lon</h3>
+          <p><span id="longitude">24.854840</span></p>
+        </div>
+        <div class="data-block">
+          <h3>GPS ETE</h3>
+          <p><span id="gps_ete">562</span></p>
+        </div>
+        <div class="data-block">
+          <h3>GPS ETA</h3>
+          <p><span id="gps_eta">15:05:33Z</span></p>
+        </div>
+      </div>
+      <div class="bottom-row">
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <img src="images/aircraft.png" alt="Aircraft" class="aircraft" id="aircraftIcon">
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const serverIP = "http://localhost:5000"; // Change this to your server IP if needed
+    let maxETE = null;
+    const headingTape = document.getElementById('headingTape');
+    const headingCenterValue = document.getElementById('headingCenterValue');
+    let currentHeading = 269; 
+    
+    
+    const PIXELS_PER_DEGREE = 2;      // Each degree is 2 pixels
+    const CONTAINER_WIDTH = 400;      // Width of heading tape container
+    const CENTER_OFFSET = CONTAINER_WIDTH / 2;  // Center point
+    const VISIBLE_RANGE = 180;        // Degrees visible (+/- 90 from center)
+    const TICK_SPACING = 10;          // Degrees between each tick
+    const MAJOR_TICK_INTERVAL = 20;   // Show labels every 20 degrees
+    const HIDE_LABEL_RANGE = 25;      // Hide labels within ±25 degrees of current heading
+    
+ 
+    function initHeadingTape() {
+      headingTape.innerHTML = '';
+      
+   
+      for (let deg = -VISIBLE_RANGE; deg <= VISIBLE_RANGE + 360; deg += TICK_SPACING) {
+        const normalizedDeg = ((deg % 360) + 360) % 360;
+        
+        const tick = document.createElement('div');
+        tick.classList.add('tick');
+        
+        const tickPosition = CENTER_OFFSET + (deg * PIXELS_PER_DEGREE);
+        tick.style.left = `${tickPosition}px`;
+        
+        if (normalizedDeg % MAJOR_TICK_INTERVAL === 0) {
+          tick.classList.add('major');
+          
+          const label = document.createElement('div');
+          label.classList.add('tick-label');
+          label.setAttribute('data-heading', normalizedDeg);
+          label.textContent = normalizedDeg;
+          label.style.left = `${tickPosition}px`;
+          
+          headingTape.appendChild(label);
         }
-
-        setInterval(updateFlightData, 1000); // Update every second
-        updateFlightData(); // Initial load
-    </script>
+        
+        headingTape.appendChild(tick);
+      }
+    }
+    
+    function updateLabelVisibility(heading) {
+      const normalizedHeading = ((heading % 360) + 360) % 360;
+      
+      const labels = headingTape.querySelectorAll('.tick-label');
+      
+      labels.forEach(label => {
+        const labelHeading = parseInt(label.getAttribute('data-heading'));
+        
+        let distance = Math.abs(normalizedHeading - labelHeading);
+        if (distance > 180) {
+          distance = 360 - distance;
+        }
+        
+        if (distance <= HIDE_LABEL_RANGE) {
+          label.classList.add('hide');
+        } else {
+          label.classList.remove('hide');
+        }
+      });
+    }
+    
+    function updateHeadingTape(heading) {
+      const normalizedHeading = ((heading % 360) + 360) % 360;
+      
+      headingCenterValue.textContent = Math.round(normalizedHeading);
+      
+      const position = -1 * normalizedHeading * PIXELS_PER_DEGREE;
+      
+      headingTape.style.transform = `translateX(${position}px)`;
+      
+      updateLabelVisibility(normalizedHeading);
+    }
+    
+    function updateFlightData() {
+      fetch(`${serverIP}/data`)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("airspeed").textContent = data.airspeed.toFixed(0);
+          document.getElementById("altitude").textContent = data.altitude.toFixed(0);
+          document.getElementById("latitude").textContent = data.latitude.toFixed(6);
+          document.getElementById("longitude").textContent = data.longitude.toFixed(6);
+          
+          const eteSeconds = data.gps_ete;
+          const hours = Math.floor(eteSeconds / 3600);
+          const minutes = Math.floor((eteSeconds % 3600) / 60);
+          const seconds = Math.floor(eteSeconds % 60);
+          const formattedETE = `${hours}h ${minutes}m ${seconds}s`;
+          document.getElementById("gps_ete").textContent = formattedETE;
+          
+          document.getElementById("gps_eta").textContent = data.gps_eta;
+          
+          const headingDegrees = data.heading * (180 / Math.PI) - 10;
+          currentHeading = headingDegrees;
+          updateHeadingTape(currentHeading);
+          
+          const currentETE = data.gps_ete;
+          if (maxETE === null) {
+            maxETE = currentETE;
+          }
+          if (currentETE > maxETE) {
+            maxETE = currentETE;
+          }
+          const ratio = (maxETE - currentETE) / maxETE;
+          const progressPercent = Math.min(Math.max(ratio * 100, 0), 100);
+          document.getElementById('progressFill').style.width = progressPercent + '%';
+          document.getElementById('aircraftIcon').style.left = progressPercent + '%';
+        })
+        .catch(error => {
+          console.error("Error fetching data:", error);
+          currentHeading = (currentHeading + 0.2) % 360;
+          updateHeadingTape(currentHeading);
+        });
+    }
+    
+    initHeadingTape();
+    updateHeadingTape(currentHeading);
+    
+    setInterval(updateFlightData, 1000); 
+  </script>
 </body>
 </html>
