@@ -9,16 +9,6 @@ app = Flask(__name__, static_folder="static")
 sm = SimConnect()
 aq = AircraftRequests(sm) 
 
-# SimVars to fetch
-simvars = {
-    "airspeed": ("AIRSPEED_INDICATED", "knots"),
-    "altitude": ("PLANE_ALTITUDE", "feet"),
-    "heading": ("PLANE_HEADING_DEGREES_TRUE", "degrees"),
-    "latitude": ("PLANE_LATITUDE", "degrees"),
-    "longitude": ("PLANE_LONGITUDE", "degrees"),
-    "gps_ete": ("GPS_ETE", "seconds"),  
-    "gps_eta": ("GPS_ETA", "seconds"), 
-}
 
 def format_eta(seconds_since_midnight):
     
