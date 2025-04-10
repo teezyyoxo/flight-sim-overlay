@@ -1,5 +1,5 @@
 # Flight Sim Overlay ✈️
-## HUGE THANKS TO @jocxfin to the redesign!
+## HUGE SHOUTOUT TO @jocxfin for the MASSIVE redesign!
 NEW:
 ![demo_new_ui.png](https://github.com/teezyyoxo/flight-sim-overlay/blob/main/screenshots/demo_new_ui.png?raw=true)
 
@@ -71,8 +71,8 @@ If you haven't already and since you're already here, check out my other project
 
 *Please* feel free to submit a pull request if you'd like to help with styling and/or add new features!
 
-# Credits
-@jocxfin - for hooking this project up with a MAJOR facelift
+## Credits
+[@jocxfin](https://github.com/jocxfin) - for hooking this project up with a MAJOR facelift! THANK YOU!!!!!!
 ----------
 And remember, friends – in the name of Kelsey (74Gear), **keep the blue side up**.
 Enjoy, and happy flying! ✈️ 🎮
