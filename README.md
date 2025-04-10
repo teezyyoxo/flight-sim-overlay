@@ -1,9 +1,11 @@
 # Flight Sim Overlay ✈️
 ## HUGE THANKS TO @jocxfin to the redesign!
 NEW:
-![alt text](screenshots/demo_ui_new.png)
+![demo_new_ui.png](https://github.com/teezyyoxo/flight-sim-overlay/blob/main/screenshots/demo_new_ui.png?raw=true)
+
 OLD:
-![alt text](screenshots/overlay.png)
+
+![overlay.png](https://github.com/teezyyoxo/flight-sim-overlay/blob/main/screenshots/overlay.png?raw=true)
 
 I created this repo to track progress on a project for my fellow flight simulator enthusiasts. It provides a **free, customizable overlay** for flight simulator video recordings or live streams that displays basic telemetry data about the aircraft and the active flight. It currently uses SimConnect to access this data.
 ## Features:
