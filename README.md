@@ -70,6 +70,9 @@ If you haven't already and since you're already here, check out my other project
 *Automatically add location data to your in-sim screenshots!*
 
 *Please* feel free to submit a pull request if you'd like to help with styling and/or add new features!
+
+# Credits
+@jocxfin - for hooking this project up with a MAJOR facelift
 ----------
 And remember, friends – in the name of Kelsey (74Gear), **keep the blue side up**.
 Enjoy, and happy flying! ✈️ 🎮
