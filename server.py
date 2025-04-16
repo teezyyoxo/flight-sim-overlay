@@ -30,7 +30,7 @@ def get_flight_data():
     flight_data = {
         "airspeed": aq.get("AIRSPEED_INDICATED"),
         "altitude": aq.get("PLANE_ALTITUDE"),
-        "heading": aq.get("PLANE_HEADING_DEGREES_TRUE"),
+        "heading": aq.get("PLANE_HEADING_DEGREES_MAGNETIC"),
         "latitude": aq.get("PLANE_LATITUDE"),
         "longitude": aq.get("PLANE_LONGITUDE"),
         "gps_ete": aq.get("GPS_ETE"), 
