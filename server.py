@@ -34,6 +34,7 @@ def get_flight_data():
         "heading": aq.get("PLANE_HEADING_DEGREES_MAGNETIC"),
         "latitude": aq.get("PLANE_LATITUDE"),
         "longitude": aq.get("PLANE_LONGITUDE"),
+        "distance": aq.get("GPS_TARGET_DISTANCE"),
         "gps_ete": aq.get("GPS_ETE"), 
         "gps_eta": format_eta(aq.get("GPS_ETA")),  
     }

@@ -11,7 +11,7 @@
     <div class="container">
       <div class="top-row">
         <div class="left-data">
-          <!-- 3 data-blocks: airspeed, groundspeed, altitude -->
+          <!-- airspeed, groundspeed, altitude, distance -->
           <div class="data-block">
             <h3>Airspeed</h3><p id="airspeed">INOP</p>
           </div>
@@ -20,6 +20,9 @@
           </div>
           <div class="data-block">
             <h3>Altitude</h3><p id="altitude">INOP</p>
+          </div>
+          <div class="data-block">
+            <h3>Distance</h3><p id="distance">INOP</p>
           </div>
         </div>
       
@@ -30,7 +33,7 @@
           <div class="heading-bug"></div>
         </div>
       </div>
-      
+
       <div class="right-data">
         <!-- 4 data-blocks: lat, lon, gps_ete, gps_eta -->
         <div class="data-block">
@@ -144,6 +147,7 @@
           document.getElementById("airspeed").textContent = `${data.airspeed.toFixed(0)} kts`;
           document.getElementById("ground_speed").textContent = `${data.ground_speed.toFixed(0)} kts`;
           document.getElementById("altitude").textContent = `${data.altitude.toFixed(0)} ft`;
+          document.getElementById("altitude").textContent = `${data.distance.toFixed(0)} m`;
           document.getElementById("latitude").textContent = data.latitude.toFixed(6);
           document.getElementById("longitude").textContent = data.longitude.toFixed(6);
           
