@@ -10,16 +10,18 @@
   <div class="overlay">
     <div class="container">
       <div class="top-row">
-        <div class="data-grid">
-          <div class="data-block"><h3>Airspeed</h3><p><span id="airspeed">109</span> kt</p></div>
-          <div class="data-block"><h3>Ground Speed</h3><p><span id="ground_speed">109</span> kt</p></div>
-          <div class="data-block"><h3>Altitude</h3><p><span id="altitude">387</span> ft</p></div>
-          <div class="data-block"><h3>Lat</h3><p><span id="latitude">60.046491</span></p></div>
-          <div class="data-block"><h3>Lon</h3><p><span id="longitude">24.854840</span></p></div>
-          <div class="data-block"><h3>GPS ETE</h3><p><span id="gps_ete">562</span></p></div>
-          <div class="data-block"><h3>GPS ETA</h3><p><span id="gps_eta">15:05:33Z</span></p></div>
+        <div class="left-data">
+          <!-- 3 data-blocks: airspeed, groundspeed, altitude -->
+          <div class="data-block">
+            <h3>Airspeed</h3><p id="airspeed">100</p>
+          </div>
+          <div class="data-block">
+            <h3>Groundspeed</h3><p id="ground_speed"></p>
+          </div>
+          <div class="data-block">
+            <h3>Altitude</h3><p>5000</p>
+          </div>
         </div>
-      </div>
       
       <div class="heading-row">
         <div class="heading-tape-container">
@@ -28,8 +30,23 @@
           <div class="heading-bug"></div>
         </div>
       </div>
-
+      <div class="right-data">
+        <!-- 4 data-blocks: lat, lon, gps_ete, gps_eta -->
+        <div class="data-block">
+          <h3>Lat</h3><p>37.7749</p>
+        </div>
+        <div class="data-block">
+          <h3>Lon</h3><p>-122.4194</p>
+        </div>
+        <div class="data-block">
+          <h3>GPS ETE</h3><p>00:25</p>
+        </div>
+        <div class="data-block">
+          <h3>GPS ETA</h3><p>14:30</p>
+        </div>
+      </div>
       <div class="bottom-row">
+        <!-- progress bar stuff-->
         <div class="progress-container">
           <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>

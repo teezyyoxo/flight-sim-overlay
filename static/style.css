@@ -13,7 +13,9 @@ body {
     left: 50%;
     transform: translateX(-50%);
     width: 96%;
-    height: 130px;
+    height: 120px;
+    padding: 20px
+    box-sizing: border-box;
     border-radius: 17px;
     overflow: hidden;
     z-index: 1000;
@@ -45,18 +47,23 @@ body {
   
   .top-row {
     display: flex;
-    justify-content: center;
+    justify-content: space-between; /* left, center, right */
     align-items: center;
     width: 100%;
+    padding: 0 20px; /* optional horizontal padding */
+    box-sizing: border-box;
   }
 
+  .left-data, .right-data {
+    display: flex;
+    gap: 20px; /* spacing between data-blocks */
+  }
+  
   .heading-row {
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
-    height: 65px;
-    width: 100%;
+    width: 400px; /* or whatever fits your heading container */
   }
   
   .data-grid {
@@ -64,36 +71,33 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
     gap: 12px;
     flex: 1;
-    padding: 5px 40px;
+    padding: 0 10px;
     margin: 0%;
     z-index: 2;
   }
   
   .data-block {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center 
+    text-align: center; 
+    gap: 8px; /* spacing between label and value */
+    white-space: nowrap;
   }
-  
-  .data-block h3 {
-    margin: 0;
-    font-size: 12px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    outline: 1px solid yellow;
-  }
-  
-  .data-block p {
-    margin: 5px 0 0;
-    font-size: 20px;
-    font-weight: bold;
-    outline: 1px solid rgb(74, 77, 252);
-  }
+
+.data-block h3, .data-block p {
+  margin: 0;
+  <!-- outline:auto; -->
+}
   
   .heading-tape-container {
     position: relative;
     width: 400px;
-    height: 80px;
+    height: 70px;
+    padding-top: 10px;
     overflow: hidden;
-    outline: 2px solid red;
+    <!-- outline: 2px solid red; -->
   }
   
   .heading-center-value {
@@ -158,15 +162,20 @@ body {
   }
   
   .bottom-row {
-    flex: 0 0 auto;
     display: flex;
+    bottom: 0;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    padding: 0;
+    z-index: 10;
+    width: 100%;
+    position: absolute;
+    box-sizing: border-box;
   }
   
   .progress-container {
-    position: relative;
+    position: ;
     width: 97%;
     height: 30px;
     margin-top: 10px;
