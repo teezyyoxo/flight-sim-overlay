@@ -1,248 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>MSFS Overlay</title>
-<style>
-        body {
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
-                font-family: 'Segoe UI', sans-serif;
-                color: #fff;
-                background: #888;
-        }
-        .overlay {
-                position: fixed;
-                top: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 96%;
-                height: 115px;
-                border-radius: 17px;
-                overflow: hidden;
-                z-index: 1000;
-        }
-        .overlay::before {
-                content: "";
-                position: absolute;
-                top: -20px;
-                left: -20px;
-                width: calc(100% + 40px);
-                height: calc(100% + 40px);
-                background: rgba(50, 50, 50, 0.7);
-                filter: blur(10px);
-                z-index: -1;
-                border: 1px solid rgba(255, 255, 255, 0.3);
-                border-radius: 17px;
-        }
-        .container {
-                display: flex;
-                flex-direction: column;
-                width: 100%;
-                height: 100%;
-                box-sizing: border-box;
-                position: relative;
-                z-index: 1; 
-        }
-        .top-row {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                height: 50px;
-                margin-top: 10px;
-                position: relative;
-        }
-        .top-row {
-                position: relative;
-                height: 50px;
-                margin-top: 10px;
-                width: 100%;
-        }
-        .data-block {
-                position: absolute;
-                margin: 0 2px;
-                margin-top: 10px !important;
-                width: auto;
-                top: 0;
-        }
-        .top-row .data-block:nth-child(1) { left: 2%; }
-        .top-row .data-block:nth-child(2) { left: 14%; }
-        .top-row .data-block:nth-child(3) { left: 27%; }
-        .top-row .data-block:nth-child(5) { right: 27%; }
-        .top-row .data-block:nth-child(6) { right: 14%; }
-        .top-row .data-block:nth-child(7) { right: 2%; }
-        
-        .data-block h3 {
-                margin: 0;
-                font-size: 12px;
-                letter-spacing: 1px;
-                text-transform: uppercase;
-                text-align: center;
-        }
-        .data-block p {
-                margin: 5px 0 0;
-                font-size: 20px;
-                font-weight: bold;
-                text-align: center;
-        }
-        .heading-tape-container {
-                position: absolute;
-                width: 400px;
-                height: 80px;
-                overflow: hidden;
-                border-radius: 0px;
-                z-index: 5;
-                left: 50%;
-                transform: translateX(-50%);
-                top: 0;
-                margin-top: -20px;
-        }
-        .heading-center-value {
-                position: absolute;
-                top: 45%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                font-size: 45px;
-                font-weight: bold;
-                color: #fff;
-                z-index: 6;
-        }
-        .heading-tape {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                height: 40px;
-                white-space: nowrap;
-                will-change: transform;
-                transition: transform 0.2s ease-out;
-        }
-        .tick {
-                position: absolute;
-                bottom: 0;
-                width: 1.1px;
-                height: 15px;
-                background: rgba(255, 255, 255, 0.5);
-        }
-        .tick.major {
-                height: 20px;
-                background: rgba(255, 255, 255, 0.8);
-        }
-        .tick-label {
-                position: absolute;
-                bottom: 25px;
-                transform: translateX(-50%);
-                font-size: 12px;
-                color: #fff;
-                white-space: nowrap;
-        }
-        .tick-label.hide {
-                opacity: 0;
-        }
-        .heading-bug {
-                position: absolute;
-                bottom: 0px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 0;
-                height: 0;
-                border-left: 10px solid transparent;
-                border-right: 10px solid transparent;
-                border-bottom: 15px solid #00FFFF;
-                z-index: 6;
-        }
-        .heading-tape-container::after {
-                content: "";
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 1px;
-                background: rgba(255, 255, 255, 0.3);
-                
-        }
-        .heading-tape-container::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 1px;
-        }
-        .bottom-row {
-                flex: 0 0 auto;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                
-        }
-        .progress-container {
-                position: relative;
-                width: 97%;
-                height: 30px;
-                margin-top: 40px;
-        }
-        .progress-bar {
-                width: 100%;
-                height: 10px;
-                background: rgba(255,255,255,0.2);
-                border-radius: 5px;
-                overflow: hidden;
-        }
-        .progress-fill {
-                width: 0%;
-                height: 100%;
-                background: #00FFFF;
-                transition: width 0.25s linear;
-        }
-        .aircraft {
-            position: absolute;
-            top: -10px;
-            height: 30px;
-            transform: translateX(-50%);
-            filter: brightness(0) invert(1) sepia(100%) saturate(10000%) hue-rotate(175deg);
-            /* this makes the aircraft png image cyan - can delete if not wanted */
-        }
-
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MSFS Overlay</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="overlay">
     <div class="container">
       <div class="top-row">
-        <div class="data-block">
-          <h3>Airspeed</h3>
-          <p><span id="airspeed">109</span> kt</p>
+        <div class="data-grid">
+          <div class="data-block"><h3>Airspeed</h3><p><span id="airspeed">109</span> kt</p></div>
+          <div class="data-block"><h3>Ground Speed</h3><p><span id="ground_speed">109</span> kt</p></div>
+          <div class="data-block"><h3>Altitude</h3><p><span id="altitude">387</span> ft</p></div>
+          <div class="data-block"><h3>Lat</h3><p><span id="latitude">60.046491</span></p></div>
+          <div class="data-block"><h3>Lon</h3><p><span id="longitude">24.854840</span></p></div>
+          <div class="data-block"><h3>GPS ETE</h3><p><span id="gps_ete">562</span></p></div>
+          <div class="data-block"><h3>GPS ETA</h3><p><span id="gps_eta">15:05:33Z</span></p></div>
         </div>
-        <div class="data-block">
-          <h3>Altitude</h3>
-          <p><span id="altitude">387</span> ft</p>
-        </div>
-        <div class="data-block">
-          <h3>Lat</h3>
-          <p><span id="latitude">60.046491</span></p>
-        </div>
+      </div>
+      
+      <div class="heading-row">
         <div class="heading-tape-container">
           <div class="heading-center-value" id="headingCenterValue">0</div>
           <div class="heading-tape" id="headingTape"></div>
           <div class="heading-bug"></div>
         </div>
-        <div class="data-block">
-          <h3>Lon</h3>
-          <p><span id="longitude">24.854840</span></p>
-        </div>
-        <div class="data-block">
-          <h3>GPS ETE</h3>
-          <p><span id="gps_ete">562</span></p>
-        </div>
-        <div class="data-block">
-          <h3>GPS ETA</h3>
-          <p><span id="gps_eta">15:05:33Z</span></p>
-        </div>
       </div>
+
       <div class="bottom-row">
         <div class="progress-container">
           <div class="progress-bar">
@@ -338,6 +124,7 @@
         .then(response => response.json())
         .then(data => {
           document.getElementById("airspeed").textContent = data.airspeed.toFixed(0);
+          document.getElementById("ground_speed").textContent = data.ground_speed.toFixed(0);
           document.getElementById("altitude").textContent = data.altitude.toFixed(0);
           document.getElementById("latitude").textContent = data.latitude.toFixed(6);
           document.getElementById("longitude").textContent = data.longitude.toFixed(6);
