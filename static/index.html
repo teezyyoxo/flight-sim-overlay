@@ -13,13 +13,13 @@
         <div class="left-data">
           <!-- 3 data-blocks: airspeed, groundspeed, altitude -->
           <div class="data-block">
-            <h3>Airspeed</h3><p id="airspeed">100</p>
+            <h3>Airspeed</h3><p id="airspeed">INOP</p>
           </div>
           <div class="data-block">
-            <h3>Groundspeed</h3><p id="ground_speed"></p>
+            <h3>Groundspeed</h3><p id="ground_speed">INOP</p>
           </div>
           <div class="data-block">
-            <h3>Altitude</h3><p>5000</p>
+            <h3>Altitude</h3><p id="altitude">INOP</p>
           </div>
         </div>
       
@@ -30,19 +30,20 @@
           <div class="heading-bug"></div>
         </div>
       </div>
+      
       <div class="right-data">
         <!-- 4 data-blocks: lat, lon, gps_ete, gps_eta -->
         <div class="data-block">
-          <h3>Lat</h3><p>37.7749</p>
+          <h3>Lat</h3><p id="latitude">0.0000</p>
         </div>
         <div class="data-block">
-          <h3>Lon</h3><p>-122.4194</p>
+          <h3>Lon</h3><p id="longitude">0.0000</p>
         </div>
         <div class="data-block">
-          <h3>GPS ETE</h3><p>00:25</p>
+          <h3>GPS ETE</h3><p id="gps_ete">99.99</p>
         </div>
         <div class="data-block">
-          <h3>GPS ETA</h3><p>14:30</p>
+          <h3>GPS ETA</h3><p id="gps_eta">99.99</p>
         </div>
       </div>
       <div class="bottom-row">
@@ -140,9 +141,9 @@
       fetch(`${serverIP}/data`)
         .then(response => response.json())
         .then(data => {
-          document.getElementById("airspeed").textContent = data.airspeed.toFixed(0);
-          document.getElementById("ground_speed").textContent = data.ground_speed.toFixed(0);
-          document.getElementById("altitude").textContent = data.altitude.toFixed(0);
+          document.getElementById("airspeed").textContent = `${data.airspeed.toFixed(0)} kts`;
+          document.getElementById("ground_speed").textContent = `${data.ground_speed.toFixed(0)} kts`;
+          document.getElementById("altitude").textContent = `${data.altitude.toFixed(0)} ft`;
           document.getElementById("latitude").textContent = data.latitude.toFixed(6);
           document.getElementById("longitude").textContent = data.longitude.toFixed(6);
           
