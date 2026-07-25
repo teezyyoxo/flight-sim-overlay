@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en" data-preview="{{ 'true' if preview else 'false' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Flight Sim Overlay</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}?v={{ version }}">
+</head>
+<body class="overlay-page{% if preview %} preview-mode{% endif %}">
+  <main class="flight-overlay" id="flightOverlay" aria-label="Live flight telemetry overlay">
+    <header class="status-rail" id="statusRail">
+      <div class="route-identity">
+        <span class="eyebrow" id="callsign">FLIGHT SIM OVERLAY</span>
+        <strong id="routeLabel">Awaiting flight plan</strong>
+      </div>
+      <div class="connection-group" aria-label="Connection status">
+        <span class="status-badge" id="simconnectStatus"><i></i> SimConnect</span>
+        <span class="status-badge" id="simbriefStatus"><i></i> SimBrief</span>
+        <span class="status-badge" id="sayintentionsStatus"><i></i> SayIntentions</span>
+        <span class="status-badge" id="vatsimStatus"><i></i> VATSIM</span>
+      </div>
+      <span class="phase-pill" id="phasePill">At the gate</span>
+    </header>
+
+    <section class="instrument-grid">
+      <div class="metric-bank metric-bank-primary" id="primaryMetrics"></div>
+
+      <div class="heading-instrument" id="headingInstrument">
+        <span class="instrument-label">MAGNETIC HEADING</span>
+        <div class="heading-readout"><span id="headingValue">---</span><small>°</small></div>
+        <div class="heading-window">
+          <div class="heading-ticks" id="headingTicks"></div>
+          <span class="heading-index" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <div class="metric-bank metric-bank-secondary" id="secondaryMetrics"></div>
+    </section>
+
+    <section class="flight-progress" id="flightProgress">
+      <div class="progress-meta">
+        <span><strong id="originCode">DEP</strong><small id="originName">Departure</small></span>
+        <span class="progress-caption"><b id="progressText">0%</b> route complete</span>
+        <span class="destination"><strong id="destinationCode">ARR</strong><small id="destinationName">Arrival</small></span>
+      </div>
+      <div class="route-line">
+        <span class="route-fill" id="routeFill"></span>
+        <span class="airport-dot airport-dot-origin"></span>
+        <img class="aircraft-marker" id="aircraftMarker"
+             src="{{ url_for('static', filename='images/aircraft/airliner.svg') }}"
+             alt="Aircraft position">
+        <span class="airport-dot airport-dot-destination"></span>
+      </div>
+      <div class="phase-timeline" id="phaseTimeline" aria-label="Flight phase timeline"></div>
+    </section>
+  </main>
+  <div class="offline-notice" id="offlineNotice" role="status">Telemetry unavailable — reconnecting</div>
+  <script>window.OVERLAY_PREVIEW = {{ 'true' if preview else 'false' }};</script>
+  <script src="{{ url_for('static', filename='js/overlay.js') }}?v={{ version }}"></script>
+</body>
+</html>

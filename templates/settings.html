@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Flight Sim Overlay — Settings</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='settings.css') }}?v={{ version }}">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">✈</span>
+      <span><b>Flight Sim Overlay</b><small>Control Center · v{{ version }}</small></span>
+    </div>
+    <div class="header-status">
+      <span class="health" id="headerSimStatus"><i></i> SimConnect</span>
+      <a class="button button-ghost" href="/overlay" target="_blank">Open overlay ↗</a>
+      <button class="button button-primary" type="button" id="saveButton">Save settings</button>
+    </div>
+  </header>
+
+  <div class="studio">
+    <nav class="section-nav" aria-label="Settings sections">
+      <a href="#appearance" class="active"><span>01</span> Appearance</a>
+      <a href="#layout"><span>02</span> Layout</a>
+      <a href="#behavior"><span>03</span> Flight behavior</a>
+      <a href="#integrations"><span>04</span> Integrations</a>
+      <a href="#system"><span>05</span> System</a>
+      <div class="nav-note">
+        <b>Changes preview live.</b>
+        Save when the overlay looks right; settings persist in <code>config/settings.json</code>.
+      </div>
+    </nav>
+
+    <main class="settings-content">
+      <section class="settings-section" id="appearance">
+        <div class="section-heading">
+          <span>01</span>
+          <div><h1>Appearance</h1><p>Choose a visual system, aircraft marker, and compositing behavior.</p></div>
+        </div>
+
+        <div class="control-block">
+          <div class="control-title">
+            <div><h2>Theme set</h2><p>Fifteen production-ready palettes. The original treatment remains the default.</p></div>
+            <button class="button button-ghost" type="button" id="randomTheme">Surprise me</button>
+          </div>
+          <div class="theme-grid" id="themeGrid"></div>
+        </div>
+
+        <div class="control-block">
+          <div class="control-title"><div><h2>Aircraft marker</h2><p>Select the silhouette that travels along the route.</p></div></div>
+          <div class="aircraft-grid" id="aircraftGrid"></div>
+        </div>
+
+        <div class="control-grid">
+          <label class="range-control">
+            <span><b>Transparency</b><small>0% solid · 100% invisible</small></span>
+            <div><input type="range" min="0" max="100" step="1" data-path="appearance.transparency">
+              <span class="number-suffix"><input type="number" min="0" max="100" step="1" data-path="appearance.transparency"><i>%</i></span></div>
+          </label>
+          <label class="range-control">
+            <span><b>Overlay scale</b><small>Resize all overlay elements together</small></span>
+            <div><input type="range" min="60" max="150" step="1" data-path="appearance.scale">
+              <span class="number-suffix"><input type="number" min="60" max="150" step="1" data-path="appearance.scale"><i>%</i></span></div>
+          </label>
+          <label class="range-control">
+            <span><b>Overlay width</b><small>Percentage of the browser canvas</small></span>
+            <div><input type="range" min="50" max="100" step="1" data-path="appearance.width">
+              <span class="number-suffix"><input type="number" min="50" max="100" step="1" data-path="appearance.width"><i>%</i></span></div>
+          </label>
+          <label class="select-control">
+            <span><b>Screen edge</b><small>Anchor the overlay to the top or bottom</small></span>
+            <select data-path="appearance.position"><option value="top">Top</option><option value="bottom">Bottom</option></select>
+          </label>
+          <label class="field-control">
+            <span><b>Horizontal offset</b><small>Pixels from the centered position</small></span>
+            <span class="number-suffix"><input type="number" min="-2000" max="2000" data-path="appearance.offsetX"><i>px</i></span>
+          </label>
+          <label class="field-control">
+            <span><b>Edge offset</b><small>Pixels from the selected screen edge</small></span>
+            <span class="number-suffix"><input type="number" min="0" max="1000" data-path="appearance.offsetY"><i>px</i></span>
+          </label>
+          <label class="range-control">
+            <span><b>Motion smoothing</b><small>Higher values produce calmer movement</small></span>
+            <div><input type="range" min="0" max="100" step="1" data-path="appearance.motionSmoothing">
+              <span class="number-suffix"><input type="number" min="0" max="100" step="1" data-path="appearance.motionSmoothing"><i>%</i></span></div>
+          </label>
+        </div>
+      </section>
+
+      <section class="settings-section" id="layout">
+        <div class="section-heading">
+          <span>02</span>
+          <div><h1>Layout</h1><p>Place and reorder data without editing HTML or CSS.</p></div>
+        </div>
+        <div class="metric-layout">
+          <div><div class="list-heading"><h2>Left metric bank</h2><small>Primary readouts</small></div><div class="metric-list" id="primaryMetricList"></div></div>
+          <div><div class="list-heading"><h2>Right metric bank</h2><small>Secondary readouts</small></div><div class="metric-list" id="secondaryMetricList"></div></div>
+        </div>
+        <div class="toggle-grid">
+          <label class="toggle"><span><b>Status rail</b><small>Connection and integration indicators</small></span><input type="checkbox" data-path="appearance.showStatusRail"><i></i></label>
+          <label class="toggle"><span><b>Coordinates</b><small>Latitude and longitude readouts</small></span><input type="checkbox" data-path="appearance.showCoordinates"><i></i></label>
+          <label class="toggle"><span><b>Heading tape</b><small>Smooth magnetic compass readout</small></span><input type="checkbox" data-path="layout.showHeading"><i></i></label>
+          <label class="toggle"><span><b>Route progress</b><small>Route line and aircraft marker</small></span><input type="checkbox" data-path="layout.showProgress"><i></i></label>
+          <label class="toggle"><span><b>Phase timeline</b><small>Gate-to-gate lifecycle beneath the route</small></span><input type="checkbox" data-path="layout.showPhaseTimeline"><i></i></label>
+        </div>
+      </section>
+
+      <section class="settings-section" id="behavior">
+        <div class="section-heading">
+          <span>03</span>
+          <div><h1>Flight behavior</h1><p>Tune phase thresholds for your aircraft and simulator setup.</p></div>
+        </div>
+        <div class="info-banner"><b>Hysteresis is built in.</b> A new phase must remain valid for the confirmation time before it is displayed. This prevents runway bumps, slews, and noisy vertical speed from causing flicker.</div>
+        <div class="control-grid compact">
+          <label class="field-control"><span><b>Gate speed</b><small>Below this counts as stopped</small></span><span class="number-suffix"><input type="number" min="0" max="10" step=".1" data-path="flightPhases.gateSpeedKts"><i>kt</i></span></label>
+          <label class="field-control"><span><b>Taxi speed ceiling</b><small>Reference ground speed</small></span><span class="number-suffix"><input type="number" min="10" max="50" data-path="flightPhases.taxiSpeedKts"><i>kt</i></span></label>
+          <label class="field-control"><span><b>Takeoff speed</b><small>Departure fallback threshold</small></span><span class="number-suffix"><input type="number" min="30" max="120" data-path="flightPhases.takeoffSpeedKts"><i>kt</i></span></label>
+          <label class="field-control"><span><b>Airborne AGL</b><small>Positive airborne confirmation</small></span><span class="number-suffix"><input type="number" min="20" max="500" data-path="flightPhases.airborneAglFt"><i>ft</i></span></label>
+          <label class="field-control"><span><b>Approach AGL</b><small>Descent-to-approach boundary</small></span><span class="number-suffix"><input type="number" min="500" max="10000" data-path="flightPhases.approachAglFt"><i>ft</i></span></label>
+          <label class="field-control"><span><b>Cruise tolerance</b><small>Difference from planned altitude</small></span><span class="number-suffix"><input type="number" min="200" max="5000" data-path="flightPhases.cruiseAltitudeToleranceFt"><i>ft</i></span></label>
+          <label class="field-control"><span><b>Stable vertical speed</b><small>Cruise detection deadband</small></span><span class="number-suffix"><input type="number" min="50" max="1000" data-path="flightPhases.verticalSpeedStableFpm"><i>fpm</i></span></label>
+          <label class="field-control"><span><b>Confirm transition</b><small>Required stable duration</small></span><span class="number-suffix"><input type="number" min="0" max="15" step=".5" data-path="flightPhases.transitionConfirmSeconds"><i>sec</i></span></label>
+        </div>
+      </section>
+
+      <section class="settings-section" id="integrations">
+        <div class="section-heading">
+          <span>04</span>
+          <div><h1>Integrations</h1><p>Bring planning and network context into the overlay.</p></div>
+        </div>
+        <div class="integration-cards">
+          <article class="integration-card">
+            <div class="integration-head"><span class="integration-logo simbrief">SB</span><span><h2>SimBrief</h2><small class="integration-state" id="simbriefState">Checking…</small></span><label class="mini-toggle"><input type="checkbox" data-path="integrations.simbriefEnabled"><i></i></label></div>
+            <p>Imports the latest route, airports, cruise altitude, callsign, and planned distance.</p>
+            <label class="text-field"><span>User ID or username</span><input type="text" autocomplete="off" placeholder="e.g. 123456" data-path="integrations.simbriefUserId"></label>
+            <button class="button button-ghost full" type="button" id="refreshSimbrief">Force-refresh flight plan</button>
+          </article>
+          <article class="integration-card">
+            <div class="integration-head"><span class="integration-logo vatsim">V</span><span><h2>VATSIM</h2><small class="integration-state" id="vatsimState">Checking…</small></span><label class="mini-toggle"><input type="checkbox" data-path="integrations.vatsimEnabled"><i></i></label></div>
+            <p>Matches your active pilot entry on the public VATSIM data feed.</p>
+            <label class="text-field"><span>Callsign</span><input type="text" autocomplete="off" placeholder="e.g. UAL825" data-path="integrations.vatsimCallsign"></label>
+          </article>
+          <article class="integration-card">
+            <div class="integration-head"><span class="integration-logo si">SI</span><span><h2>SayIntentions.AI</h2><small class="integration-state" id="sayintentionsState">Checking…</small></span><label class="mini-toggle"><input type="checkbox" data-path="integrations.sayintentionsEnabled"><i></i></label></div>
+            <p>Reads the supported local <code>flightJSON</code> service for current flight, clearance, runway, and gate context.</p>
+            <div class="secure-note">API credentials are discovered locally and never sent to this settings page.</div>
+          </article>
+        </div>
+      </section>
+
+      <section class="settings-section" id="system">
+        <div class="section-heading">
+          <span>05</span>
+          <div><h1>System</h1><p>Telemetry cadence, diagnostics, and safe recovery.</p></div>
+        </div>
+        <div class="control-grid">
+          <label class="select-control"><span><b>Telemetry refresh</b><small>Lower is smoother; higher uses less CPU</small></span><select data-path="telemetry.pollIntervalMs"><option value="250">4 times / second</option><option value="500">2 times / second</option><option value="1000">Once / second</option><option value="2000">Every 2 seconds</option></select></label>
+          <label class="field-control"><span><b>Reconnect interval</b><small>Retry delay when SimConnect is offline</small></span><span class="number-suffix"><input type="number" min="1" max="60" data-path="telemetry.connectionRetrySeconds"><i>sec</i></span></label>
+          <label class="toggle panel-toggle"><span><b>Demo telemetry</b><small>Animate a compressed gate-to-gate flight</small></span><input type="checkbox" data-path="telemetry.demoMode"><i></i></label>
+        </div>
+        <div class="danger-zone">
+          <div><h2>Reset configuration</h2><p>Restore the original Midnight palette, 30% transparency, default layout, and default flight thresholds.</p></div>
+          <button class="button button-danger" type="button" id="resetButton">Reset to defaults…</button>
+        </div>
+      </section>
+    </main>
+
+    <aside class="preview-pane">
+      <div class="preview-heading"><span><b>Live preview</b><small>Unsaved changes</small></span><button type="button" id="previewSize" title="Toggle preview size">⤢</button></div>
+      <div class="preview-frame"><iframe id="previewFrame" src="/preview" title="Live overlay preview"></iframe></div>
+      <div class="preview-tip">The preview uses sample telemetry when SimConnect is offline. Position offsets apply to the actual browser canvas, not this scaled view.</div>
+    </aside>
+  </div>
+
+  <div class="save-bar" id="saveBar"><span><i></i> Unsaved changes</span><button class="button button-primary" type="button" id="saveButtonBottom">Save settings</button></div>
+  <div class="toast" id="toast" role="status"></div>
+  <dialog id="resetDialog">
+    <form method="dialog">
+      <span class="dialog-icon">↺</span><h2>Reset every setting?</h2>
+      <p>This restores the v2 defaults. Your <code>.env</code> file and API credentials are not changed.</p>
+      <div><button class="button button-ghost" value="cancel">Cancel</button><button class="button button-danger" id="confirmReset" value="default">Reset settings</button></div>
+    </form>
+  </dialog>
+  <script src="{{ url_for('static', filename='js/settings.js') }}?v={{ version }}"></script>
+</body>
+</html>
