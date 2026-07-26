@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "flight-sim-overlay"
-version = "2.0.1"
+version = "2.0.2"
 description = "Flight Sim Overlay"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
   "Flask==3.1.0",
-  "Pillow==11.1.0",
+  "Pillow==12.3.0",
   "pystray==0.19.5",
   "SimConnect==0.4.26",
   "Werkzeug==3.1.3",

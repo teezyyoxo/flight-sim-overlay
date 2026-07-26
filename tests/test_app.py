@@ -9,7 +9,7 @@ def test_pages_and_health(tmp_path):
     assert client.get("/settings").status_code == 200
     health = client.get("/healthz").get_json()
     assert health["ok"] is True
-    assert health["version"] == "2.0.1" == __version__
+    assert health["version"] == "2.0.2" == __version__
     data = client.get("/api/data").get_json()
     assert data["progress"] is None
     assert data["progressSource"] == "unavailable"
