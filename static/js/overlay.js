@@ -40,6 +40,7 @@
   let displayedProgress = 0;
   let pollTimer = null;
   let lastTickBase = null;
+  let settingsFingerprint = null;
 
   function value(raw) {
     return raw === null || raw === undefined || raw === "" ? null : String(raw);
@@ -291,17 +292,31 @@
     pollTimer = setInterval(poll, interval);
   }
 
-  async function init() {
+  async function refreshSettings() {
     try {
       const response = await fetch("/api/settings", { cache: "no-store" });
-      catalog = await response.json();
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const nextCatalog = await response.json();
+      const nextFingerprint = JSON.stringify(nextCatalog.settings);
+      if (nextFingerprint === settingsFingerprint) return;
+      const previousPollInterval = currentSettings?.telemetry?.pollIntervalMs;
+      catalog = nextCatalog;
       applySettings(catalog.settings, catalog.theme);
+      settingsFingerprint = nextFingerprint;
+      if (pollTimer && previousPollInterval !== currentSettings.telemetry.pollIntervalMs) {
+        schedulePolling();
+      }
     } catch (error) {
       console.error("Unable to load overlay settings", error);
     }
+  }
+
+  async function init() {
+    await refreshSettings();
     if (preview) renderData(sampleData());
     await poll();
     schedulePolling();
+    if (!preview) setInterval(refreshSettings, 3000);
     requestAnimationFrame(animate);
   }
 
@@ -310,7 +325,7 @@
     applySettings(event.data.settings, event.data.theme);
   });
   window.addEventListener("storage", (event) => {
-    if (event.key === "flight-overlay-settings-updated") init();
+    if (event.key === "flight-overlay-settings-updated") refreshSettings();
   });
   init();
 })();

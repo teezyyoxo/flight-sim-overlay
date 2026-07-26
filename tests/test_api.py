@@ -17,7 +17,7 @@ class ApiTests(unittest.TestCase):
             self.assertEqual(client.get("/settings").status_code, 200)
             health = client.get("/healthz")
             self.assertEqual(health.status_code, 200)
-            self.assertEqual(health.json["version"], "2.0.0")
+            self.assertEqual(health.json["version"], "2.0.1")
 
             settings = client.get("/api/settings").json
             self.assertEqual(len(settings["themes"]), 15)

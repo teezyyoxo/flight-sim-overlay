@@ -52,7 +52,7 @@ body.preview-mode {
   border-radius: 18px;
   background:
     linear-gradient(115deg,
-      rgba(var(--panel-rgb), calc(var(--panel-alpha) + .08)),
+      rgba(var(--panel-rgb), var(--panel-alpha)),
       rgba(var(--panel-rgb), var(--panel-alpha)));
   box-shadow:
     0 18px 48px rgba(0, 0, 0, .24),

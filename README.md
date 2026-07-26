@@ -1,7 +1,7 @@
 # Flight Sim Overlay
 
 Flight Sim Overlay is a free, local companion overlay for Microsoft Flight
-Simulator recordings and live streams. Version **2.0.0** turns the original proof
+Simulator recordings and live streams. Version **2.0.1** turns the original proof
 of concept into a configurable gate-to-gate instrument strip with robust
 SimConnect telemetry, flight-plan-aware progress, a settings studio, and a
 Windows system-tray controller.

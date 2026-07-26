@@ -210,8 +210,8 @@ class IntegrationManager:
             "originName": str(origin.get("name") or ""),
             "destinationName": str(destination.get("name") or ""),
             "callsign": str(
-                general.get("icao_airline", "")
-                + str(general.get("flight_number", ""))
+                str(general.get("icao_airline") or "")
+                + str(general.get("flight_number") or "")
             ).strip(),
             "aircraft": str(
                 aircraft.get("icaocode") or aircraft.get("name") or ""

@@ -98,6 +98,7 @@ class FlightPhaseDetector:
         engines = True if t.engines_running is None else bool(t.engines_running)
 
         gate_speed = float(config["gateSpeedKts"])
+        taxi_speed = float(config["taxiSpeedKts"])
         takeoff_speed = float(config["takeoffSpeedKts"])
         airborne_agl = float(config["airborneAglFt"])
         approach_agl = float(config["approachAglFt"])
@@ -155,7 +156,7 @@ class FlightPhaseDetector:
             if agl > approach_agl * 1.35 and vs > stable_vs:
                 return "climb"  # go-around
         elif self.phase == "arrival":
-            if on_ground and gs < takeoff_speed * 0.7:
+            if on_ground and gs <= taxi_speed:
                 return "taxiing_arrival"
             if not on_ground and agl > airborne_agl * 2:
                 return "climb"  # rejected touchdown / go-around

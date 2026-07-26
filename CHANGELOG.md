@@ -3,6 +3,18 @@
 All notable changes to Flight Sim Overlay are documented here. Versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [2.0.1] - 2026-07-25
+
+### Fixed
+
+- Live overlay settings now refresh without duplicating animation or polling loops.
+- Demo mode is enabled before telemetry services start, including when using the
+  legacy mock-server launcher.
+- Arrival taxi detection honors the configured taxi-speed threshold.
+- SimBrief plans with missing airline or flight-number fields no longer fail to
+  parse.
+- Fully transparent panels no longer retain a faint gradient.
+
 ## [2.0.0] - 2026-07-25
 
 ### Added

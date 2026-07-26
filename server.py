@@ -46,10 +46,6 @@ def main() -> None:
         os.environ["FSO_DEMO_MODE"] = "1"
     app = create_app()
     settings = app.extensions["overlay_settings"]
-    if args.demo:
-        demo_settings = settings.get()
-        demo_settings["telemetry"]["demoMode"] = True
-        settings._settings = demo_settings  # command-line override; intentionally not saved
 
     server = ServerThread(app, host, port)
     server.start()

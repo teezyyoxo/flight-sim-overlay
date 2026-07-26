@@ -29,3 +29,18 @@ def test_simbrief_parser_builds_route_without_exposing_raw_payload():
     assert plan["callsign"] == "UAL825"
     assert plan["cruiseAltitudeFt"] == 35000
     assert len(plan["routePoints"]) == 3
+
+
+def test_simbrief_parser_accepts_missing_callsign_parts():
+    plan = IntegrationManager._parse_simbrief(
+        {
+            "params": {"request_id": "43"},
+            "general": {"icao_airline": None, "flight_number": None},
+            "aircraft": {},
+            "origin": {},
+            "destination": {},
+            "navlog": {},
+            "times": {},
+        }
+    )
+    assert plan["callsign"] == ""

@@ -65,3 +65,17 @@ def test_go_around_returns_approach_to_climb():
         on_ground=False,
     )
     settle(detector, go_around, "climb", 1, progress=88)
+
+
+def test_arrival_uses_configured_taxi_speed():
+    detector = FlightPhaseDetector()
+    detector.phase = "arrival"
+    detector._initialized = True
+    taxi = Telemetry(
+        ground_speed=34,
+        agl=0,
+        altitude=500,
+        vertical_speed=0,
+        on_ground=True,
+    )
+    settle(detector, taxi, "taxiing_arrival", 0, progress=98)
