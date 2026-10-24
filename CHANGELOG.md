@@ -3,6 +3,12 @@
 All notable changes to Flight Sim Overlay are documented here. Versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Security
+
+- Updated Pillow from 12.3.0 to 13.0.0 to resolve published security advisories.
+
 ## [2.0.2] - 2026-07-25
 
 ### Security
